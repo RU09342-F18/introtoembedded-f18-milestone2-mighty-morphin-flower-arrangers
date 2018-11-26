@@ -18,37 +18,43 @@ void ButtonSetup();
 
 float slope = -0.002794;
 float intercept = 54.8924;
-float temp;
+float temp = 20;
 
 char space = ' ';
 char lowBit, highBit;
 
-float volt, ADC_Voltage, temp;
+float volt = 2048;
+float ADC_Voltage, temp;
 
 float Kp = 100;                             // Proportional Term
 float Ki = 60;                              // Integral Term
 float Kd = 60;                              // Derivative Term
-float Up, Ui, Ud, SatErr, Err, OutPreSat, Out, Up1;
-float OutMax = 1000;                        // Max Duty Cycle Possible
+float Up, Ud, SatErr, Err, OutPreSat, Up1;
+float Ui = 0;
+int Out;
+float OutMax = 999;                         // Max Duty Cycle Possible
 float OutMin = 0;                           // Lowest Duty Cycle Possible
-float desiredTemp = 42;                     // Desired temperature
+float desiredTemp = 25;                     // Desired temperature
+int t = 0;
+int t1 = 0;
+int dt = 0;
 
 int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;                   // Stop watchdog timer
 
-  DutyCycleSetup();                         // Setup Duty Cycle
+  //DutyCycleSetup();                         // Setup Duty Cycle
   TimerA0Setup();                           // Setup TimerA0
-  TimerA1Setup();                           // Setup TimerA1
+  //TimerA1Setup();                           // Setup TimerA1
   LEDSetup();                               // Setup Fan Output Pin and LED P4.7*
                                             // *LED P4.7 has the same duty cycle as fan for testing purposes
-  ButtonSetup();                            // Setup buttons
+  //ButtonSetup();                            // Setup buttons
 
   P6SEL |= 0x01;                            // Enable A/D channel A0
 
   // ADC12 Setup (Code from TI Resources)
   ADC12CTL0 = ADC12ON+ADC12MSC+ADC12SHT0_8; // Turn on ADC12, extend sampling time to avoid overflow of results
-  ADC12CTL1 = ADC12SHP+ADC12CONSEQ_3+ADC12DIV_7 ;       // Use sampling timer, repeated sequence
+  ADC12CTL1 = ADC12SHP+ADC12CONSEQ_3+ADC12DIV_7;       // Use sampling timer, repeated sequence
   ADC12MCTL0 = ADC12INCH_0;                 // ref+=AVcc, channel = A0
   ADC12IE = 0x01;                           // Enable ADC12IFG.1
   ADC12CTL0 |= ADC12ENC;                    // Enable conversions
@@ -65,9 +71,9 @@ int main(void)
   UCA1MCTL |= UCBRS_2;                      // set modulation pattern to high on bit 1 & 5
   UCA1CTL1 &= ~UCSWRST;                     // initialize USCI
   UCA1IE |= UCRXIE;                         // enable USCI_A1 RX interrupt
-  //UCA1IFG &= ~UCRXIFG;                    // clears interrupt flags
+  UCA1IFG &= ~UCRXIFG;                      // clears interrupt flags
 
-  TA0CTL = TASSEL_2 | MC_1;                 // SMClock, Up mode
+  //TA0CTL = TASSEL_2 | MC_1;                 // SMClock, Up mode
 
   __bis_SR_register(LPM0_bits + GIE);       // Enter LPM4, Enable interrupts
   __no_operation();
@@ -82,19 +88,24 @@ __interrupt void ADC12ISR (void)
 
     // Temperature calculations
     volt = ADC12MEM0;
-    ADC_Voltage = (volt/4095) * 3.3;
-    temp = -((330000-319190*(ADC_Voltage))/(4147*(ADC_Voltage)));
 
-    //TA0CCR1 = 500 + Kp*(temp - 25);         // P controller calculation (the ID in PID to be added later)
+
+    //TA0CCR1 = 500;// + Kp*(temp - 25);         // P controller calculation (the ID in PID to be added later)
+    //UCA1IFG &= ~UCRXIFG;                    // clears interrupt flags
 
 }
 #pragma vector=TIMER0_A1_VECTOR             // Disables LED once time has reached duty cycle
 __interrupt void Timer0_A1 (void)
 {
+
+    ADC_Voltage = (volt/4095) * 3.3;
+    temp = -((330000-319190*(ADC_Voltage))/(4147*(ADC_Voltage)));
+    UCA1TXBUF = temp;
     Err = temp - desiredTemp;               // Compute the error
+    Up1 = Up;                               // Track previous Up and current Up
     Up = Kp * Err;                          // Compute Proportional Control
-    Ui = Ui + (Ki * (Up * 0.001));          // Compute Integral Control
-    Ud = Kd * ((Up - Up1) / 0.001);         // Compute Derivative Control
+    Ui += (Ki * (Up * 0.001));              // Compute Integral Control
+    Ud = Kd * (((Up - Up1)) / 0.001);       // Compute Derivative Control
     OutPreSat = Up + Ui + Ud;               // Output before saturation is taken into account
     if (OutPreSat > OutMax)                 // Saturate output
     {
@@ -109,11 +120,10 @@ __interrupt void Timer0_A1 (void)
         Out = OutPreSat;
     }
     SatErr = Out - OutPreSat;               // Compute saturate difference
-    Up1 = Up;
 
-    TA0CCR1 = Out;
+    //TA0CCR1 = Out;//Out;
 
-    // Fan on for duty cycle
+    // Fan off for duty cycle
     FAN_OUT &= ~FAN0;                       // fan off
     P4OUT &= ~BIT7;                         // P4.7 LED off
     TA0CCTL1 &= ~FAN0;                      // clears flag
@@ -121,16 +131,10 @@ __interrupt void Timer0_A1 (void)
 #pragma vector=TIMER0_A0_VECTOR             // enables the LED at the end of the cycle
 __interrupt void Timer0_A0 (void)
 {
-    // Fan off for duty cycle
+    // Fan on for duty cycle
     FAN_OUT |= (FAN0);                      // turns on fan
     P4OUT |= BIT7;                          // P4.7 LED on
     TA0CCTL0 &= ~FAN0;                      // clears flag
 }
 
-#pragma vector = USCI_A1_VECTOR
-__interrupt void USCI_A1_ISR(void) {
-    UCA1TXBUF = UCA1RXBUF;
-    desiredTemp = UCA1RXBUF;
-    __delay_cycles(100);
-    UCA1TXBUF = desiredTemp;//temp;                       // Send temp to UART
-}
+

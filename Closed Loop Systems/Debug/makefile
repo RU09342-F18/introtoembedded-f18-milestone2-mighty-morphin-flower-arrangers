@@ -13,7 +13,6 @@ ORDERED_OBJS += \
 "./ButtonSetup.obj" \
 "./DutyCycleSetup.obj" \
 "./LEDsetup.obj" \
-"./PIDControl.obj" \
 "./TimerA0Setup.obj" \
 "./TimerA1Setup.obj" \
 "./main.obj" \
@@ -161,8 +160,8 @@ Milestone2OpenLoop.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "ButtonSetup.obj" "DutyCycleSetup.obj" "LEDsetup.obj" "PIDControl.obj" "TimerA0Setup.obj" "TimerA1Setup.obj" "main.obj" 
-	-$(RM) "ButtonSetup.d" "DutyCycleSetup.d" "LEDsetup.d" "PIDControl.d" "TimerA0Setup.d" "TimerA1Setup.d" "main.d" 
+	-$(RM) "ButtonSetup.obj" "DutyCycleSetup.obj" "LEDsetup.obj" "TimerA0Setup.obj" "TimerA1Setup.obj" "main.obj" 
+	-$(RM) "ButtonSetup.d" "DutyCycleSetup.d" "LEDsetup.d" "TimerA0Setup.d" "TimerA1Setup.d" "main.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
