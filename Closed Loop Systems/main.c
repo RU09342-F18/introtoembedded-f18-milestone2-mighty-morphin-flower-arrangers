@@ -23,18 +23,19 @@ float temp = 20;
 char space = ' ';
 char lowBit, highBit;
 
-float volt = 2048;
-float ADC_Voltage, temp;
+volatile float volt = 2048;
+float ADC_Voltage;
 
-float Kp = 100;                             // Proportional Term
-float Ki = 60;                              // Integral Term
-float Kd = 60;                              // Derivative Term
+float Kp = 300;                             // Proportional Term
+float Ki = 6;                              // Integral Term
+float Kd = 6;                              // Derivative Term
 float Up, Ud, SatErr, Err, OutPreSat, Up1;
 float Ui = 0;
-int Out;
-float OutMax = 999;                         // Max Duty Cycle Possible
+float Out = 500;
+float Out1 = 10;
+float OutMax = 998;                         // Max Duty Cycle Possible
 float OutMin = 0;                           // Lowest Duty Cycle Possible
-float desiredTemp = 25;                     // Desired temperature
+float desiredTemp = 30;                     // Desired temperature
 int t = 0;
 int t1 = 0;
 int dt = 0;
@@ -91,22 +92,27 @@ __interrupt void ADC12ISR (void)
 
 
     //TA0CCR1 = 500;// + Kp*(temp - 25);         // P controller calculation (the ID in PID to be added later)
-    //UCA1IFG &= ~UCRXIFG;                    // clears interrupt flags
+    UCA1IFG &= ~UCRXIFG;                    // clears interrupt flags
 
 }
 #pragma vector=TIMER0_A1_VECTOR             // Disables LED once time has reached duty cycle
 __interrupt void Timer0_A1 (void)
 {
+    // Fan off for duty cycle
+    FAN_OUT &= ~FAN0;                       // fan off
+    P4OUT &= ~BIT7;                         // P4.7 LED off
+    TA0CCTL1 &= ~FAN0;                      // clears flag
 
     ADC_Voltage = (volt/4095) * 3.3;
     temp = -((330000-319190*(ADC_Voltage))/(4147*(ADC_Voltage)));
     UCA1TXBUF = temp;
+    P4OUT ^= BIT7;
     Err = temp - desiredTemp;               // Compute the error
     Up1 = Up;                               // Track previous Up and current Up
     Up = Kp * Err;                          // Compute Proportional Control
     Ui += (Ki * (Up * 0.001));              // Compute Integral Control
     Ud = Kd * (((Up - Up1)) / 0.001);       // Compute Derivative Control
-    OutPreSat = Up + Ui + Ud;               // Output before saturation is taken into account
+    OutPreSat = Up;               // Output before saturation is taken into account
     if (OutPreSat > OutMax)                 // Saturate output
     {
         Out = OutMax;
@@ -120,13 +126,9 @@ __interrupt void Timer0_A1 (void)
         Out = OutPreSat;
     }
     SatErr = Out - OutPreSat;               // Compute saturate difference
-
-    //TA0CCR1 = Out;//Out;
-
-    // Fan off for duty cycle
-    FAN_OUT &= ~FAN0;                       // fan off
-    P4OUT &= ~BIT7;                         // P4.7 LED off
-    TA0CCTL1 &= ~FAN0;                      // clears flag
+    //Out1 += 1;
+    //if (Out1 > 998) Out1 = 0;
+    TA0CCR1 = Out;
 }
 #pragma vector=TIMER0_A0_VECTOR             // enables the LED at the end of the cycle
 __interrupt void Timer0_A0 (void)
@@ -137,4 +139,8 @@ __interrupt void Timer0_A0 (void)
     TA0CCTL0 &= ~FAN0;                      // clears flag
 }
 
+#pragma vector = USCI_A1_VECTOR
+__interrupt void USCI_A1_ISR(void) {
+    desiredTemp = UCA1RXBUF;
+}
 

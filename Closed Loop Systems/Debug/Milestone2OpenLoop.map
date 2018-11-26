@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v18.1.3                     
 ******************************************************************************
->> Linked Sat Nov 24 16:18:53 2018
+>> Linked Mon Nov 26 17:11:29 2018
 
 OUTPUT FILE NAME:   <Milestone2OpenLoop.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004682
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004696
 
 
 MEMORY CONFIGURATION
@@ -19,8 +19,8 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
-  RAM                   00002400   00002000  000000f4  00001f0c  RWIX
-  FLASH                 00004400   0000bb80  00000304  0000b87c  RWIX
+  RAM                   00002400   00002000  000000fa  00001f06  RWIX
+  FLASH                 00004400   0000bb80  00000336  0000b84a  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -85,7 +85,7 @@ MEMORY CONFIGURATION
   INT61                 0000fffa   00000002  00000002  00000000  RWIX
   INT62                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FLASH2                00010000   00014400  000018a2  00012b5e  RWIX
+  FLASH2                00010000   00014400  000018bc  00012b44  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -93,38 +93,38 @@ SECTION ALLOCATION MAP
  output                                  attributes/
 section   page    origin      length       input sections
 --------  ----  ----------  ----------   ----------------
-.data      0    00002400    00000034     UNINITIALIZED
-                  00002400    00000034     main.obj (.data)
+.data      0    00002400    0000003c     UNINITIALIZED
+                  00002400    0000003c     main.obj (.data)
 
-.bss       0    00002434    00000020     UNINITIALIZED
-                  00002434    00000004     (.common:ADC_Voltage)
-                  00002438    00000004     (.common:Err)
-                  0000243c    00000004     (.common:OutPreSat)
-                  00002440    00000004     (.common:SatErr)
-                  00002444    00000004     (.common:Ud)
-                  00002448    00000004     (.common:Up)
-                  0000244c    00000004     (.common:Up1)
-                  00002450    00000002     (.common:Out)
-                  00002452    00000001     (.common:highBit)
-                  00002453    00000001     (.common:lowBit)
+.bss       0    0000243c    0000001e     UNINITIALIZED
+                  0000243c    00000004     (.common:ADC_Voltage)
+                  00002440    00000004     (.common:Err)
+                  00002444    00000004     (.common:OutPreSat)
+                  00002448    00000004     (.common:SatErr)
+                  0000244c    00000004     (.common:Ud)
+                  00002450    00000004     (.common:Up)
+                  00002454    00000004     (.common:Up1)
+                  00002458    00000001     (.common:highBit)
+                  00002459    00000001     (.common:lowBit)
 
 .stack     0    00004360    000000a0     UNINITIALIZED
                   00004360    00000004     rts430x_lc_rd_eabi.lib : boot.c.obj (.stack)
                   00004364    0000009c     --HOLE--
 
 .text:_isr 
-*          0    00004400    000002b6     
-                  00004400    0000025a     main.obj (.text:_isr:Timer0_A1)
-                  0000465a    00000028     main.obj (.text:_isr:ADC12ISR)
-                  00004682    0000001c     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
-                  0000469e    00000010     main.obj (.text:_isr:Timer0_A0)
-                  000046ae    00000008     rts430x_lc_rd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    00004400    000002e0     
+                  00004400    0000026a     main.obj (.text:_isr:Timer0_A1)
+                  0000466a    0000002c     main.obj (.text:_isr:ADC12ISR)
+                  00004696    0000001c     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
+                  000046b2    00000016     main.obj (.text:_isr:USCI_A1_ISR)
+                  000046c8    00000010     main.obj (.text:_isr:Timer0_A0)
+                  000046d8    00000008     rts430x_lc_rd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
-.cinit     0    000046b6    0000004e     
-                  000046b6    0000002c     (.cinit..data.load) [load image, compression = lzss]
-                  000046e2    0000000c     (__TI_handler_table)
-                  000046ee    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  000046f4    00000010     (__TI_cinit_table)
+.cinit     0    000046e0    00000056     
+                  000046e0    00000034     (.cinit..data.load) [load image, compression = lzss]
+                  00004714    0000000c     (__TI_handler_table)
+                  00004720    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00004726    00000010     (__TI_cinit_table)
 
 .binit     0    00004400    00000000     
 
@@ -149,7 +149,7 @@ USCI_B1    0    0000ffda    00000002
                   0000ffda    00000002     rts430x_lc_rd_eabi.lib : int45.asm.obj (.int45)
 
 USCI_A1    0    0000ffdc    00000002     
-                  0000ffdc    00000002     rts430x_lc_rd_eabi.lib : int46.asm.obj (.int46)
+                  0000ffdc    00000002     main.obj (.int46)
 
 PORT1      0    0000ffde    00000002     
                   0000ffde    00000002     rts430x_lc_rd_eabi.lib : int47.asm.obj (.int47)
@@ -208,7 +208,7 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.text      0    00010000    000018a2     
+.text      0    00010000    000018bc     
                   00010000    00000466     rts430x_lc_rd_eabi.lib : frcdivd.c.obj (.text:__TI_frcdivd)
                   00010466    000002e0                            : addd.c.obj (.text:__mspabi_addd)
                   00010746    00000280                            : frcmpyd.c.obj (.text:__TI_frcmpyd)
@@ -226,35 +226,36 @@ SYSNMI     0    0000fffc    00000002
                   00011598    00000066                            : cvtfd.c.obj (.text:__mspabi_cvtfd)
                   000115fe    00000054                            : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
                   00011652    0000004a                            : fs_cmp.asm.obj (.text)
-                  0001169c    0000003e                            : asr32.asm.obj (.text:l_asr_const)
-                  000116da    0000003e                            : lsl32.asm.obj (.text:l_lsl_const)
-                  00011718    0000003e                            : lsr32.asm.obj (.text:l_lsr_const)
-                  00011756    00000036                            : fs_itof.asm.obj (.text)
-                  0001178c    00000024     TimerA0Setup.obj (.text:TimerA0Setup)
-                  000117b0    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  000117d4    00000024                            : fs_utof.asm.obj (.text)
-                  000117f8    00000024                            : mult32_f5hw.asm.obj (.text)
-                  0001181c    00000018                            : mult16_f5hw.asm.obj (.text)
-                  00011834    00000014                            : memcpy.c.obj (.text:memcpy)
-                  00011848    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  0001185a    00000010                            : asr32.asm.obj (.text:l_asr)
-                  0001186a    00000010                            : lsl32.asm.obj (.text:l_lsl)
-                  0001187a    00000010                            : lsr32.asm.obj (.text:l_lsr)
-                  0001188a    0000000c     LEDsetup.obj (.text:LEDSetup)
-                  00011896    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
-                  0001189c    00000004                            : pre_init.c.obj (.text:_system_pre_init)
-                  000118a0    00000002                            : startup.c.obj (.text:_system_post_cinit)
+                  0001169c    00000046                            : fs_tou.asm.obj (.text)
+                  000116e2    0000003e                            : asr32.asm.obj (.text:l_asr_const)
+                  00011720    0000003e                            : lsl32.asm.obj (.text:l_lsl_const)
+                  0001175e    0000003e                            : lsr32.asm.obj (.text:l_lsr_const)
+                  0001179c    00000024     TimerA0Setup.obj (.text:TimerA0Setup)
+                  000117c0    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  000117e4    00000024                            : fs_utof.asm.obj (.text)
+                  00011808    00000024                            : mult32_f5hw.asm.obj (.text)
+                  0001182c    00000018                            : mult16_f5hw.asm.obj (.text)
+                  00011844    00000014                            : memcpy.c.obj (.text:memcpy)
+                  00011858    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  0001186a    00000010                            : asr32.asm.obj (.text:l_asr)
+                  0001187a    00000010                            : lsl32.asm.obj (.text:l_lsl)
+                  0001188a    00000010                            : lsr32.asm.obj (.text:l_lsr)
+                  0001189a    0000000c     LEDsetup.obj (.text:LEDSetup)
+                  000118a6    0000000a     rts430x_lc_rd_eabi.lib : fs_neg.asm.obj (.text)
+                  000118b0    00000006                            : exit.c.obj (.text:abort)
+                  000118b6    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+                  000118ba    00000002                            : startup.c.obj (.text:_system_post_cinit)
 
 MODULE SUMMARY
 
        Module                       code   ro data   rw data
        ------                       ----   -------   -------
     .\
-       main.obj                     766    6         84     
+       main.obj                     808    8         90     
        TimerA0Setup.obj             36     0         0      
        LEDsetup.obj                 12     0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       814    6         84     
+       Total:                       856    8         90     
                                                             
     C:\ti\ccsv8\tools\compiler\ti-cgt-msp430_18.1.3.LTS\lib\rts430x_lc_rd_eabi.lib
        frcdivd.c.obj                1126   0         0      
@@ -276,7 +277,7 @@ MODULE SUMMARY
        lsl32.asm.obj                78     0         0      
        lsr32.asm.obj                78     0         0      
        fs_cmp.asm.obj               74     0         0      
-       fs_itof.asm.obj              54     0         0      
+       fs_tou.asm.obj               70     0         0      
        copy_zero_init.c.obj         36     0         0      
        fs_utof.asm.obj              36     0         0      
        mult32_f5hw.asm.obj          36     0         0      
@@ -284,6 +285,7 @@ MODULE SUMMARY
        mult16_f5hw.asm.obj          24     0         0      
        memcpy.c.obj                 20     0         0      
        copy_decompress_none.c.obj   18     0         0      
+       fs_neg.asm.obj               10     0         0      
        isr_trap.asm.obj             8      0         0      
        exit.c.obj                   6      0         0      
        pre_init.c.obj               4      0         0      
@@ -292,7 +294,6 @@ MODULE SUMMARY
        int43.asm.obj                0      2         0      
        int44.asm.obj                0      2         0      
        int45.asm.obj                0      2         0      
-       int46.asm.obj                0      2         0      
        int47.asm.obj                0      2         0      
        int48.asm.obj                0      2         0      
        int49.asm.obj                0      2         0      
@@ -308,24 +309,24 @@ MODULE SUMMARY
        int62.asm.obj                0      2         0      
        startup.c.obj                2      0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       6186   40        0      
+       Total:                       6212   38        0      
                                                             
        Stack:                       0      0         160    
-       Linker Generated:            0      78        0      
+       Linker Generated:            0      86        0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 7000   124       244    
+       Grand Total:                 7068   132       250    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 000046f4 records: 2, size/record: 8, table size: 16
-	.data: load addr=000046b6, load size=0000002c bytes, run addr=00002400, run size=00000034 bytes, compression=lzss
-	.bss: load addr=000046ee, load size=00000006 bytes, run addr=00002434, run size=00000020 bytes, compression=zero_init
+__TI_cinit_table @ 00004726 records: 2, size/record: 8, table size: 16
+	.data: load addr=000046e0, load size=00000034 bytes, run addr=00002400, run size=0000003c bytes, compression=lzss
+	.bss: load addr=00004720, load size=00000006 bytes, run addr=0000243c, run size=0000001e bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 000046e2 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00004714 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_lzss
 	index: 2, handler: __TI_decompress_none
@@ -350,7 +351,7 @@ address   name
 0000070a  ADC12IFG                               
 0000070b  ADC12IFG_H                             
 0000070a  ADC12IFG_L                             
-0000465a  ADC12ISR                               
+0000466a  ADC12ISR                               
 0000070e  ADC12IV                                
 0000070f  ADC12IV_H                              
 0000070e  ADC12IV_L                              
@@ -418,8 +419,8 @@ address   name
 00000732  ADC12MEM9                              
 00000733  ADC12MEM9_H                            
 00000732  ADC12MEM9_L                            
-00002434  ADC_Voltage                            
-00011896  C$$EXIT                                
+0000243c  ADC_Voltage                            
+000118b0  C$$EXIT                                
 000008c0  CBCTL0                                 
 000008c1  CBCTL0_H                               
 000008c0  CBCTL0_L                               
@@ -496,7 +497,7 @@ address   name
 0000050e  DMAIV                                  
 0000050f  DMAIV_H                                
 0000050e  DMAIV_L                                
-00002438  Err                                    
+00002440  Err                                    
 00000140  FCTL1                                  
 00000141  FCTL1_H                                
 00000140  FCTL1_L                                
@@ -509,7 +510,7 @@ address   name
 0000241a  Kd                                     
 00002416  Ki                                     
 00002412  Kp                                     
-0001188a  LEDSetup                               
+0001189a  LEDSetup                               
 000004c4  MAC                                    
 000004da  MAC32H                                 
 000004db  MAC32H_H                               
@@ -558,10 +559,11 @@ address   name
 000004e0  OP2L_L                                 
 000004c9  OP2_H                                  
 000004c8  OP2_L                                  
-00002450  Out                                    
-00002422  OutMax                                 
-00002426  OutMin                                 
-0000243c  OutPreSat                              
+00002422  Out                                    
+00002426  Out1                                   
+0000242a  OutMax                                 
+0000242e  OutMin                                 
+00002444  OutPreSat                              
 0000020e  P1IV                                   
 0000021e  P2IV                                   
 000001e0  P4MAP01                                
@@ -805,7 +807,7 @@ address   name
 0000019a  SYSUNIV                                
 0000019b  SYSUNIV_H                              
 0000019a  SYSUNIV_L                              
-00002440  SatErr                                 
+00002448  SatErr                                 
 00000352  TA0CCR0                                
 00000354  TA0CCR1                                
 00000356  TA0CCR2                                
@@ -858,9 +860,9 @@ address   name
 000003e0  TB0EX0                                 
 000003ee  TB0IV                                  
 000003d0  TB0R                                   
-0000469e  Timer0_A0                              
+000046c8  Timer0_A0                              
 00004400  Timer0_A1                              
-0001178c  TimerA0Setup                           
+0001179c  TimerA0Setup                           
 000005d0  UCA0ABCTL                              
 000005c6  UCA0BRW                                
 000005c7  UCA0BRW_H                              
@@ -1096,23 +1098,24 @@ address   name
 00000932  USBVECINT                              
 00000933  USBVECINT_H                            
 00000932  USBVECINT_L                            
-00002444  Ud                                     
+000046b2  USCI_A1_ISR                            
+0000244c  Ud                                     
 0000241e  Ui                                     
-00002448  Up                                     
-0000244c  Up1                                    
+00002450  Up                                     
+00002454  Up1                                    
 0000015c  WDTCTL                                 
 0000015d  WDTCTL_H                               
 0000015c  WDTCTL_L                               
 00004400  __STACK_END                            
 000000a0  __STACK_SIZE                           
-000046f4  __TI_CINIT_Base                        
-00004704  __TI_CINIT_Limit                       
-000046e2  __TI_Handler_Table_Base                
-000046ee  __TI_Handler_Table_Limit               
-000046ae  __TI_ISR_TRAP                          
+00004726  __TI_CINIT_Base                        
+00004736  __TI_CINIT_Limit                       
+00004714  __TI_Handler_Table_Base                
+00004720  __TI_Handler_Table_Limit               
+000046d8  __TI_ISR_TRAP                          
 000115fe  __TI_auto_init_nobinit_nopinit_hold_wdt
 0001144e  __TI_decompress_lzss                   
-00011848  __TI_decompress_none                   
+00011858  __TI_decompress_none                   
 00010c2c  __TI_frcaddd                           
 00010000  __TI_frcdivd                           
 00010746  __TI_frcmpyd                           
@@ -1142,7 +1145,7 @@ ffffffff  __TI_pprof_out_hndl
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
 00011280  __TI_renormd                           
-000117b0  __TI_zero_init_nomemset                
+000117c0  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
 00010466  __mspabi_addd                          
 0001109c  __mspabi_addf                          
@@ -1152,78 +1155,79 @@ ffffffff  __c_args__
 00010e74  __mspabi_divd                          
 00011332  __mspabi_divf                          
 00011530  __mspabi_fixfi                         
-00011756  __mspabi_fltif                         
-000117d4  __mspabi_fltuf                         
+0001169c  __mspabi_fixfu                         
+000117e4  __mspabi_fltuf                         
 000109c6  __mspabi_mpyd                          
 000111c8  __mspabi_mpyf                          
-0001181c  __mspabi_mpyi_f5hw                     
-000117f8  __mspabi_mpyl_f5hw                     
-0001186a  __mspabi_slll                          
-00011712  __mspabi_slll_1                        
-000116ee  __mspabi_slll_10                       
-000116ea  __mspabi_slll_11                       
-000116e6  __mspabi_slll_12                       
-000116e2  __mspabi_slll_13                       
-000116de  __mspabi_slll_14                       
-000116da  __mspabi_slll_15                       
-0001170e  __mspabi_slll_2                        
-0001170a  __mspabi_slll_3                        
-00011706  __mspabi_slll_4                        
-00011702  __mspabi_slll_5                        
-000116fe  __mspabi_slll_6                        
-000116fa  __mspabi_slll_7                        
-000116f6  __mspabi_slll_8                        
-000116f2  __mspabi_slll_9                        
-0001185a  __mspabi_sral                          
-000116d4  __mspabi_sral_1                        
-000116b0  __mspabi_sral_10                       
-000116ac  __mspabi_sral_11                       
-000116a8  __mspabi_sral_12                       
-000116a4  __mspabi_sral_13                       
-000116a0  __mspabi_sral_14                       
-0001169c  __mspabi_sral_15                       
-000116d0  __mspabi_sral_2                        
-000116cc  __mspabi_sral_3                        
-000116c8  __mspabi_sral_4                        
-000116c4  __mspabi_sral_5                        
-000116c0  __mspabi_sral_6                        
-000116bc  __mspabi_sral_7                        
-000116b8  __mspabi_sral_8                        
-000116b4  __mspabi_sral_9                        
-0001187a  __mspabi_srll                          
-00011750  __mspabi_srll_1                        
-0001172c  __mspabi_srll_10                       
-00011728  __mspabi_srll_11                       
-00011724  __mspabi_srll_12                       
-00011720  __mspabi_srll_13                       
-0001171c  __mspabi_srll_14                       
-00011718  __mspabi_srll_15                       
-0001174c  __mspabi_srll_2                        
-00011748  __mspabi_srll_3                        
-00011744  __mspabi_srll_4                        
-00011740  __mspabi_srll_5                        
-0001173c  __mspabi_srll_6                        
-00011738  __mspabi_srll_7                        
-00011734  __mspabi_srll_8                        
-00011730  __mspabi_srll_9                        
+0001182c  __mspabi_mpyi_f5hw                     
+00011808  __mspabi_mpyl_f5hw                     
+000118a6  __mspabi_negf                          
+0001187a  __mspabi_slll                          
+00011758  __mspabi_slll_1                        
+00011734  __mspabi_slll_10                       
+00011730  __mspabi_slll_11                       
+0001172c  __mspabi_slll_12                       
+00011728  __mspabi_slll_13                       
+00011724  __mspabi_slll_14                       
+00011720  __mspabi_slll_15                       
+00011754  __mspabi_slll_2                        
+00011750  __mspabi_slll_3                        
+0001174c  __mspabi_slll_4                        
+00011748  __mspabi_slll_5                        
+00011744  __mspabi_slll_6                        
+00011740  __mspabi_slll_7                        
+0001173c  __mspabi_slll_8                        
+00011738  __mspabi_slll_9                        
+0001186a  __mspabi_sral                          
+0001171a  __mspabi_sral_1                        
+000116f6  __mspabi_sral_10                       
+000116f2  __mspabi_sral_11                       
+000116ee  __mspabi_sral_12                       
+000116ea  __mspabi_sral_13                       
+000116e6  __mspabi_sral_14                       
+000116e2  __mspabi_sral_15                       
+00011716  __mspabi_sral_2                        
+00011712  __mspabi_sral_3                        
+0001170e  __mspabi_sral_4                        
+0001170a  __mspabi_sral_5                        
+00011706  __mspabi_sral_6                        
+00011702  __mspabi_sral_7                        
+000116fe  __mspabi_sral_8                        
+000116fa  __mspabi_sral_9                        
+0001188a  __mspabi_srll                          
+00011796  __mspabi_srll_1                        
+00011772  __mspabi_srll_10                       
+0001176e  __mspabi_srll_11                       
+0001176a  __mspabi_srll_12                       
+00011766  __mspabi_srll_13                       
+00011762  __mspabi_srll_14                       
+0001175e  __mspabi_srll_15                       
+00011792  __mspabi_srll_2                        
+0001178e  __mspabi_srll_3                        
+0001178a  __mspabi_srll_4                        
+00011786  __mspabi_srll_5                        
+00011782  __mspabi_srll_6                        
+0001177e  __mspabi_srll_7                        
+0001177a  __mspabi_srll_8                        
+00011776  __mspabi_srll_9                        
 00011096  __mspabi_subf                          
-00004682  _c_int00_noargs                        
+00004696  _c_int00_noargs                        
 0000fffe  _reset_vector                          
 00004360  _stack                                 
-000118a0  _system_post_cinit                     
-0001189c  _system_pre_init                       
-00011896  abort                                  
-0000242a  desiredTemp                            
-00002432  dt                                     
-00002452  highBit                                
+000118ba  _system_post_cinit                     
+000118b6  _system_pre_init                       
+000118b0  abort                                  
+00002432  desiredTemp                            
+0000243a  dt                                     
+00002458  highBit                                
 00002404  intercept                              
-00002453  lowBit                                 
+00002459  lowBit                                 
 000114c4  main                                   
-00011834  memcpy                                 
+00011844  memcpy                                 
 00002400  slope                                  
 0000240c  space                                  
-0000242e  t                                      
-00002430  t1                                     
+00002436  t                                      
+00002438  t1                                     
 00002408  temp                                   
 0000240e  volt                                   
 
@@ -1990,33 +1994,35 @@ address   name
 00002416  Ki                                     
 0000241a  Kd                                     
 0000241e  Ui                                     
-00002422  OutMax                                 
-00002426  OutMin                                 
-0000242a  desiredTemp                            
-0000242e  t                                      
-00002430  t1                                     
-00002432  dt                                     
-00002434  ADC_Voltage                            
-00002438  Err                                    
-0000243c  OutPreSat                              
-00002440  SatErr                                 
-00002444  Ud                                     
-00002448  Up                                     
-0000244c  Up1                                    
-00002450  Out                                    
-00002452  highBit                                
-00002453  lowBit                                 
+00002422  Out                                    
+00002426  Out1                                   
+0000242a  OutMax                                 
+0000242e  OutMin                                 
+00002432  desiredTemp                            
+00002436  t                                      
+00002438  t1                                     
+0000243a  dt                                     
+0000243c  ADC_Voltage                            
+00002440  Err                                    
+00002444  OutPreSat                              
+00002448  SatErr                                 
+0000244c  Ud                                     
+00002450  Up                                     
+00002454  Up1                                    
+00002458  highBit                                
+00002459  lowBit                                 
 00004360  _stack                                 
 00004400  Timer0_A1                              
 00004400  __STACK_END                            
-0000465a  ADC12ISR                               
-00004682  _c_int00_noargs                        
-0000469e  Timer0_A0                              
-000046ae  __TI_ISR_TRAP                          
-000046e2  __TI_Handler_Table_Base                
-000046ee  __TI_Handler_Table_Limit               
-000046f4  __TI_CINIT_Base                        
-00004704  __TI_CINIT_Limit                       
+0000466a  ADC12ISR                               
+00004696  _c_int00_noargs                        
+000046b2  USCI_A1_ISR                            
+000046c8  Timer0_A0                              
+000046d8  __TI_ISR_TRAP                          
+00004714  __TI_Handler_Table_Base                
+00004720  __TI_Handler_Table_Limit               
+00004726  __TI_CINIT_Base                        
+00004736  __TI_CINIT_Limit                       
 0000ffd2  __TI_int41                             
 0000ffd4  __TI_int42                             
 0000ffd6  __TI_int43                             
@@ -2058,70 +2064,71 @@ address   name
 00011598  __mspabi_cvtfd                         
 000115fe  __TI_auto_init_nobinit_nopinit_hold_wdt
 00011652  __mspabi_cmpf                          
-0001169c  __mspabi_sral_15                       
-000116a0  __mspabi_sral_14                       
-000116a4  __mspabi_sral_13                       
-000116a8  __mspabi_sral_12                       
-000116ac  __mspabi_sral_11                       
-000116b0  __mspabi_sral_10                       
-000116b4  __mspabi_sral_9                        
-000116b8  __mspabi_sral_8                        
-000116bc  __mspabi_sral_7                        
-000116c0  __mspabi_sral_6                        
-000116c4  __mspabi_sral_5                        
-000116c8  __mspabi_sral_4                        
-000116cc  __mspabi_sral_3                        
-000116d0  __mspabi_sral_2                        
-000116d4  __mspabi_sral_1                        
-000116da  __mspabi_slll_15                       
-000116de  __mspabi_slll_14                       
-000116e2  __mspabi_slll_13                       
-000116e6  __mspabi_slll_12                       
-000116ea  __mspabi_slll_11                       
-000116ee  __mspabi_slll_10                       
-000116f2  __mspabi_slll_9                        
-000116f6  __mspabi_slll_8                        
-000116fa  __mspabi_slll_7                        
-000116fe  __mspabi_slll_6                        
-00011702  __mspabi_slll_5                        
-00011706  __mspabi_slll_4                        
-0001170a  __mspabi_slll_3                        
-0001170e  __mspabi_slll_2                        
-00011712  __mspabi_slll_1                        
-00011718  __mspabi_srll_15                       
-0001171c  __mspabi_srll_14                       
-00011720  __mspabi_srll_13                       
-00011724  __mspabi_srll_12                       
-00011728  __mspabi_srll_11                       
-0001172c  __mspabi_srll_10                       
-00011730  __mspabi_srll_9                        
-00011734  __mspabi_srll_8                        
-00011738  __mspabi_srll_7                        
-0001173c  __mspabi_srll_6                        
-00011740  __mspabi_srll_5                        
-00011744  __mspabi_srll_4                        
-00011748  __mspabi_srll_3                        
-0001174c  __mspabi_srll_2                        
-00011750  __mspabi_srll_1                        
-00011756  __mspabi_fltif                         
-0001178c  TimerA0Setup                           
-000117b0  __TI_zero_init_nomemset                
-000117d4  __mspabi_fltuf                         
-000117f8  __mspabi_mpyl_f5hw                     
-0001181c  __mspabi_mpyi_f5hw                     
-00011834  memcpy                                 
-00011848  __TI_decompress_none                   
-0001185a  __mspabi_sral                          
-0001186a  __mspabi_slll                          
-0001187a  __mspabi_srll                          
-0001188a  LEDSetup                               
-00011896  C$$EXIT                                
-00011896  abort                                  
-0001189c  _system_pre_init                       
-000118a0  _system_post_cinit                     
+0001169c  __mspabi_fixfu                         
+000116e2  __mspabi_sral_15                       
+000116e6  __mspabi_sral_14                       
+000116ea  __mspabi_sral_13                       
+000116ee  __mspabi_sral_12                       
+000116f2  __mspabi_sral_11                       
+000116f6  __mspabi_sral_10                       
+000116fa  __mspabi_sral_9                        
+000116fe  __mspabi_sral_8                        
+00011702  __mspabi_sral_7                        
+00011706  __mspabi_sral_6                        
+0001170a  __mspabi_sral_5                        
+0001170e  __mspabi_sral_4                        
+00011712  __mspabi_sral_3                        
+00011716  __mspabi_sral_2                        
+0001171a  __mspabi_sral_1                        
+00011720  __mspabi_slll_15                       
+00011724  __mspabi_slll_14                       
+00011728  __mspabi_slll_13                       
+0001172c  __mspabi_slll_12                       
+00011730  __mspabi_slll_11                       
+00011734  __mspabi_slll_10                       
+00011738  __mspabi_slll_9                        
+0001173c  __mspabi_slll_8                        
+00011740  __mspabi_slll_7                        
+00011744  __mspabi_slll_6                        
+00011748  __mspabi_slll_5                        
+0001174c  __mspabi_slll_4                        
+00011750  __mspabi_slll_3                        
+00011754  __mspabi_slll_2                        
+00011758  __mspabi_slll_1                        
+0001175e  __mspabi_srll_15                       
+00011762  __mspabi_srll_14                       
+00011766  __mspabi_srll_13                       
+0001176a  __mspabi_srll_12                       
+0001176e  __mspabi_srll_11                       
+00011772  __mspabi_srll_10                       
+00011776  __mspabi_srll_9                        
+0001177a  __mspabi_srll_8                        
+0001177e  __mspabi_srll_7                        
+00011782  __mspabi_srll_6                        
+00011786  __mspabi_srll_5                        
+0001178a  __mspabi_srll_4                        
+0001178e  __mspabi_srll_3                        
+00011792  __mspabi_srll_2                        
+00011796  __mspabi_srll_1                        
+0001179c  TimerA0Setup                           
+000117c0  __TI_zero_init_nomemset                
+000117e4  __mspabi_fltuf                         
+00011808  __mspabi_mpyl_f5hw                     
+0001182c  __mspabi_mpyi_f5hw                     
+00011844  memcpy                                 
+00011858  __TI_decompress_none                   
+0001186a  __mspabi_sral                          
+0001187a  __mspabi_slll                          
+0001188a  __mspabi_srll                          
+0001189a  LEDSetup                               
+000118a6  __mspabi_negf                          
+000118b0  C$$EXIT                                
+000118b0  abort                                  
+000118b6  _system_pre_init                       
+000118ba  _system_post_cinit                     
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
 ffffffff  __c_args__                             
 
-[891 symbols]
+[894 symbols]
