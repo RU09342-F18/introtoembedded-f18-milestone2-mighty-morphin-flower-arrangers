@@ -1,3 +1,7 @@
+/*Authors: Ian Neilsen and Eric Schroeder
+Written November 19th, 2018
+Last updated November 28th 2018*/
+
 #include <msp430.h>
 
 #define FAN0 BIT0
