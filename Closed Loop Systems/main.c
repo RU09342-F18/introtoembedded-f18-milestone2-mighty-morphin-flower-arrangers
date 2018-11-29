@@ -108,7 +108,26 @@ __interrupt void Timer0_A1 (void)
     TA0CCTL1 &= ~FAN0;                      // clears flag
 
     ADC_Voltage = (volt/4095) * 3.3;
-    temp = -((330000-319190*(ADC_Voltage))/(4147*(ADC_Voltage)));
+    if((ADC_Voltage < 1.74))
+        {
+           temp = -((165000-(171225*ADC_Voltage))/(2849*ADC_Voltage)); // Temperature Range: 15-30
+        }
+        else if((ADC_Voltage >= 1.74)&&( ADC_Voltage < 2.22))
+        {
+           temp = -((330000-(262460*ADC_Voltage))/(2729*ADC_Voltage)); // Temperature Range: 30-45
+        }
+        else if((ADC_Voltage >= 2.22)&&( ADC_Voltage < 2.59))
+        {
+            temp = -((330000-(205960*ADC_Voltage))/(1383*ADC_Voltage)); // Temperature Range: 45-60
+        }
+        else if((ADC_Voltage >= 2.59)&&(ADC_Voltage < 2.84))
+            {
+                temp = -((330000-(169120*ADC_Voltage))/(737*ADC_Voltage)); // Temperature Range: 45-60
+            }
+        else if((ADC_Voltage >= 2.84))
+              {
+                  temp = -((330000-(145640*ADC_Voltage))/(411*ADC_Voltage)); // Temperature Range: 45-60
+              }
     UCA1TXBUF = temp;
     P4OUT ^= BIT7;
     Err = temp - desiredTemp;               // Compute the error
@@ -147,4 +166,3 @@ __interrupt void Timer0_A0 (void)
 __interrupt void USCI_A1_ISR(void) {
     desiredTemp = UCA1RXBUF;
 }
-
