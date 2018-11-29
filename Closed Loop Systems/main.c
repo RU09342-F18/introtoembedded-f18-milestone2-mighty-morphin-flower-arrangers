@@ -48,12 +48,9 @@ int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;                   // Stop watchdog timer
 
-  //DutyCycleSetup();                         // Setup Duty Cycle
   TimerA0Setup();                           // Setup TimerA0
-  //TimerA1Setup();                           // Setup TimerA1
   LEDSetup();                               // Setup Fan Output Pin and LED P4.7*
                                             // *LED P4.7 has the same duty cycle as fan for testing purposes
-  //ButtonSetup();                            // Setup buttons
 
   P6SEL |= 0x01;                            // Enable A/D channel A0
 
@@ -64,7 +61,8 @@ int main(void)
   ADC12IE = 0x01;                           // Enable ADC12IFG.1
   ADC12CTL0 |= ADC12ENC;                    // Enable conversions
   ADC12CTL0 |= ADC12SC;                     // Start convn - software trigger
-
+  
+  //UART Setup and UART Interrupt Setup
   P4SEL |= BIT4;                            // UART TX
   P4SEL |= BIT5;                            // UART RX
 
@@ -78,8 +76,6 @@ int main(void)
   UCA1IE |= UCRXIE;                         // enable USCI_A1 RX interrupt
   UCA1IFG &= ~UCRXIFG;                      // clears interrupt flags
 
-  //TA0CTL = TASSEL_2 | MC_1;                 // SMClock, Up mode
-
   __bis_SR_register(LPM0_bits + GIE);       // Enter LPM4, Enable interrupts
   __no_operation();
 
@@ -90,12 +86,8 @@ __interrupt void ADC12ISR (void)
     // Converting ADC12 input to char for UART output
     lowBit = ADC12MEM0;
     highBit = ADC12MEM0 >> 8;
-
-    // Temperature calculations
-    volt = ADC12MEM0;
-
-
-    //TA0CCR1 = 500;// + Kp*(temp - 25);         // P controller calculation (the ID in PID to be added later)
+  
+    volt = ADC12MEM0;                       // ADC Voltage information stored for temperature calculations
     UCA1IFG &= ~UCRXIFG;                    // clears interrupt flags
 
 }
@@ -103,40 +95,39 @@ __interrupt void ADC12ISR (void)
 __interrupt void Timer0_A1 (void)
 {
     // Fan off for duty cycle
-    FAN_OUT &= ~FAN0;                       // fan off
-    P4OUT &= ~BIT7;                         // P4.7 LED off
+    FAN_OUT &= ~FAN0;                       // Fan off
+    P4OUT &= ~BIT7;                         // P4.7 Indicator LED off
     TA0CCTL1 &= ~FAN0;                      // clears flag
 
     ADC_Voltage = (volt/4095) * 3.3;
     if((ADC_Voltage < 1.74))
-        {
-           temp = -((165000-(171225*ADC_Voltage))/(2849*ADC_Voltage)); // Temperature Range: 15-30
-        }
-        else if((ADC_Voltage >= 1.74)&&( ADC_Voltage < 2.22))
-        {
-           temp = -((330000-(262460*ADC_Voltage))/(2729*ADC_Voltage)); // Temperature Range: 30-45
-        }
-        else if((ADC_Voltage >= 2.22)&&( ADC_Voltage < 2.59))
-        {
-            temp = -((330000-(205960*ADC_Voltage))/(1383*ADC_Voltage)); // Temperature Range: 45-60
-        }
-        else if((ADC_Voltage >= 2.59)&&(ADC_Voltage < 2.84))
-            {
-                temp = -((330000-(169120*ADC_Voltage))/(737*ADC_Voltage)); // Temperature Range: 45-60
-            }
-        else if((ADC_Voltage >= 2.84))
-              {
-                  temp = -((330000-(145640*ADC_Voltage))/(411*ADC_Voltage)); // Temperature Range: 45-60
-              }
-    UCA1TXBUF = temp;
-    P4OUT ^= BIT7;
+    {
+       temp = -((165000-(171225*ADC_Voltage))/(2849*ADC_Voltage)); // Temperature Range: 15-30
+    }
+    else if((ADC_Voltage >= 1.74)&&( ADC_Voltage < 2.22))
+    {
+       temp = -((330000-(262460*ADC_Voltage))/(2729*ADC_Voltage)); // Temperature Range: 30-45
+    }
+    else if((ADC_Voltage >= 2.22)&&( ADC_Voltage < 2.59))
+    {
+        temp = -((330000-(205960*ADC_Voltage))/(1383*ADC_Voltage)); // Temperature Range: 45-60
+    }
+    else if((ADC_Voltage >= 2.59)&&(ADC_Voltage < 2.84))
+    {
+        temp = -((330000-(169120*ADC_Voltage))/(737*ADC_Voltage)); // Temperature Range: 60-75
+    }
+    else if((ADC_Voltage >= 2.84))
+    {
+        temp = -((330000-(145640*ADC_Voltage))/(411*ADC_Voltage)); // Temperature Range: 75-90
+    }
+    UCA1TXBUF = temp;                       // Send temp info over UART
     Err = temp - desiredTemp;               // Compute the error
     Up1 = Up;                               // Track previous Up and current Up
     Up = Kp * Err;                          // Compute Proportional Control
     Ui += (Ki * (Up * 0.001));              // Compute Integral Control
     Ud = Kd * (((Up - Up1)) / 0.001);       // Compute Derivative Control
-    OutPreSat = Up;               // Output before saturation is taken into account
-    if (OutPreSat > OutMax)                 // Saturate output
+    OutPreSat = Up;                         // Output before saturation is taken into account
+    if (OutPreSat > OutMax)                 // Ensure that output is within saturation range
     {
         Out = OutMax;
     }
@@ -149,16 +140,14 @@ __interrupt void Timer0_A1 (void)
         Out = OutPreSat;
     }
     SatErr = Out - OutPreSat;               // Compute saturate difference
-    //Out1 += 1;
-    //if (Out1 > 998) Out1 = 0;
-    TA0CCR1 = Out;
+    TA0CCR1 = Out;                          // Fan PWM changed in accordance to temp
 }
 #pragma vector=TIMER0_A0_VECTOR             // enables the LED at the end of the cycle
 __interrupt void Timer0_A0 (void)
 {
     // Fan on for duty cycle
     FAN_OUT |= (FAN0);                      // turns on fan
-    P4OUT |= BIT7;                          // P4.7 LED on
+    P4OUT |= BIT7;                          // P4.7 Indicator LED on
     TA0CCTL0 &= ~FAN0;                      // clears flag
 }
 
